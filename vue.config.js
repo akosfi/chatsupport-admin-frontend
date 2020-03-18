@@ -1,0 +1,10 @@
+// vue.config.js
+module.exports = {
+    configureWebpack: {
+      // No need for splitting
+      optimization: {
+        splitChunks: false
+      }
+    },
+    runtimeCompiler: true
+  }
