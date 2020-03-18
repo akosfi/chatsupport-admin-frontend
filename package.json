@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
+    "highlight.js": "^9.18.1",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
