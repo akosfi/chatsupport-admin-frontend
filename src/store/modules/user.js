@@ -17,8 +17,8 @@ const actions = {
             return commit('saveUserToStore', r.user);
         });
     },
-    loginUserAction({commit}, username, password){
-        makeRequestToServer('/api/user/login', {username, password}, 'POST')
+    loginUserAction({commit}, user){
+        makeRequestToServer('/api/user/login', user, 'POST')
         .then(r => {
             return commit('saveUserToStore', r.user);
         });

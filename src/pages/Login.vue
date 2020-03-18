@@ -2,15 +2,30 @@
     <div>
       <h2 class="text-center mt-3">Login</h2>
       <div class="d-flex justify-content-center mt-3">
-        <form>
+        <form
+          method="POST"
+          @submit="submitForm"
+        >
           <div class="form-group">
             <label for="usernameInput">Username</label>
-            <input type="text" name="username" class="form-control" placeholder="Enter username" id="usernameInput">
+            <input 
+              v-model="username"
+              type="text"
+              name="username"
+              class="form-control"
+              placeholder="Enter username"
+              id="usernameInput">
           </div>
 
           <div class="form-group">
             <label for="passwordInput">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Password" id="passwordInput">
+            <input
+              v-model="password"
+              type="password"
+              name="password"
+              class="form-control"
+              placeholder="Password"
+              id="passwordInput">
           </div>
 
           <button type="submit" class="btn btn-primary">Login</button>
@@ -22,7 +37,30 @@
 
 <script>
 export default {
+  data: function () {
+    return {
+      username: '',
+      password: '',
+    }
+  },
   components: {
+  },
+  methods: {
+    submitForm: function(e) {
+      e.preventDefault();
+      const validationErrors = [];
+      if(!this.username) {
+        validationErrors.push("Name cannot be empty!");
+      }
+      if(!this.password) {
+        validationErrors.push("Password cannot be empty!");
+      }
+
+      if(validationErrors.length > 0) return false;
+
+      this.$store.dispatch('user/loginUserAction', {username: this.username, password: this.password});
+
+    }
   }
 }
 </script>
