@@ -1,24 +1,17 @@
 <template>
     <div>
-      <p>Aaaapp</p>
-
-
-      <router-view></router-view>
+      <p>Login</p>
     </div>
+    
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: 'Login',
   components: {
   }
 }
 </script>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-  }
 </style>
