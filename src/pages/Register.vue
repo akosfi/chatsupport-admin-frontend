@@ -6,6 +6,15 @@
           @submit="submitForm"
           method="POST"
         >
+
+          <div 
+            v-for="error in validationErrors"
+            :key="error"
+            class="alert alert-danger"
+            role="alert">
+            {{error}}
+          </div>
+
           <div class="form-group">
             <label for="usernameInput">Username</label>
             <input 
@@ -65,6 +74,7 @@ export default {
       password: "",
       repeatedPassword: "",
       email: "",
+      validationErrors: [],
     };
   },
   components: {
@@ -79,8 +89,17 @@ export default {
       if(!this.password) {
         validationErrors.push("Password cannot be empty!");
       }
+      if(!this.repeatedPassword) {
+        validationErrors.push("Repeated Password cannot be empty!");
+      }
+      if(!this.email) {
+        validationErrors.push("Email cannot be empty!");
+      }
+      if(this.password !== this.repeatedPassword) {
+        validationErrors.push("Passwords do not match!");
+      }
 
-      if(validationErrors.length > 0) return false;
+      if(validationErrors.length > 0) return this.validationErrors = validationErrors;
 
       this.$store.dispatch('user/registerUserAction', {
         username: this.username,

@@ -21,10 +21,12 @@ export default {
     this.$store
         .dispatch('user/isUserLoggedInAction')
         .then(() => {
-          if(!this.isUserIdentified) {
-            return this.$router.push('/login');
-          }
           return this.$router.push('/chat');
+        })
+        .catch(() => {
+          if(this.$route.path !== '/login' && this.$route.path !== '/register'){
+            return this.$router.push('/login');
+          } 
         });
   },
 }

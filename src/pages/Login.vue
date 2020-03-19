@@ -6,6 +6,15 @@
           method="POST"
           @submit="submitForm"
         >
+            
+          <div 
+            v-for="error in validationErrors"
+            :key="error"
+            class="alert alert-danger"
+            role="alert">
+            {{error}}
+          </div>
+
           <div class="form-group">
             <label for="usernameInput">Username</label>
             <input 
@@ -41,6 +50,7 @@ export default {
     return {
       username: '',
       password: '',
+      validationErrors: [],
     }
   },
   components: {
@@ -50,20 +60,20 @@ export default {
       e.preventDefault();
       const validationErrors = [];
       if(!this.username) {
-        validationErrors.push("Name cannot be empty!");
+        validationErrors.push("Username cannot be empty!");
       }
       if(!this.password) {
         validationErrors.push("Password cannot be empty!");
       }
 
-      if(validationErrors.length > 0) return false;
+      if(validationErrors.length > 0) return this.validationErrors = validationErrors;
 
       this.$store
           .dispatch('user/loginUserAction', {username: this.username, password: this.password})
           .then((r) => {
             this.$router.push('/chat');
           })
-          .catch(() => {
+          .catch((errors) => {
             //Push validation errors to error list!
           });;
 

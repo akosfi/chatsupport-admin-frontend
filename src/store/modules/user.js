@@ -4,8 +4,6 @@ const state = {
     chatConnectionToken: null,
     user: null,
     identificationAttempted: false,
-    loginErrors: [],
-    registrationErrors: [],
 };
 
 const getters = {
@@ -81,12 +79,6 @@ const mutations = {
     },
     setIdentificationAttempted(state) {
         state.identificationAttempted = true;
-    },
-    setLoginErrors(state, errors) {
-        state.loginErrors = errors;
-    },
-    setRegistrationErrors(state, errors) {
-        state.registrationErrors = errors;
     },
     setChatToken(state, token) {
         state.chatConnectionToken = token;
