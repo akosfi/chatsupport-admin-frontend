@@ -14,7 +14,7 @@ class ChatSocket {
 
         this._identify = this._identify.bind(this);
         this._connect = this._connect.bind(this);
-        this._onConnected = this._onConnected.bind(this);
+        //this._onConnected = this._onConnected.bind(this);
         this._onError = this._onError.bind(this);
         //this._setGuest = this._setGuest.bind(this);
     }
