@@ -23,7 +23,8 @@ export default {
         .then(() => {
           this.$router.push('/chat');
 
-          this.$store
+          //move this to admin panel
+          /*this.$store
               .dispatch('user/getChatConnectionToken')
               .then(chat_token => {
                 ChatSocket.chat_token = chat_token;
@@ -32,7 +33,7 @@ export default {
                 //ChatSocket.onConnectError = () => console.log("asd");
                 ChatSocket._connect();
               })
-              .catch(() => {});
+              .catch(() => {});*/
         })
         .catch(() => {
           if(this.$route.path !== '/login' && this.$route.path !== '/register'){
@@ -45,7 +46,7 @@ export default {
 
 <style lang="scss">
   @import "~bootstrap/scss/bootstrap.scss";
-  @import "~highlight.js/scss/atom-one-dark.scss";
+  @import "~highlight.js/scss/railscasts.scss";
   
   * {
     margin: 0;

@@ -3,7 +3,11 @@
         <div class="welcome-message-container">
             <h2 class="my-3">Install your Chat Client!</h2>
             <h5 class="my-3">1. Copy and paste this code before the closing <i>body</i> tag!</h5>
-            <div>
+            <div class="code-snippet-container">
+                <div
+                    class="code-snippet-container-button"
+                    v-on:click="copyCodeToClipboard"
+                >Click here to copy!</div>
                 <pre id="code-snippet">
 
                 </pre>
@@ -16,25 +20,68 @@
 <script>
 import hljs from 'highlight.js';
 
+
 export default {
   components: {
   },
   mounted: function() {
-        const code = '&lt;article&gt;' +
-        '&lt;h4&gt;A really awesome article&lt;/h4&gt;' +
-        '&lt;p&gt;Lots of awesome text.&lt;/p&gt;'+
-        "&lt;/article&gt;";
-        //const highlightedCode = hljs.highlightAuto(code).value;
-        document.getElementById('code-snippet').innerHTML = code;
-  } 
+        const highlightedCode = hljs.highlightAuto(codeToInstall(123)).value;
+        document.getElementById('code-snippet').innerHTML = highlightedCode;
+  },
+  methods: {
+        copyCodeToClipboard() {
+            var dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = codeToInstall(123);
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+        }
+  }
 }
+
+
+const codeToInstall = (license) => {
+    return "<script type='text/javascript'>" +
+            '\n\t' + "window.__lc = window.__lc || {};" +
+            '\n\t' + "window.__lc.license = " + license + ";" +
+            '\n\t' + "(function() {" +
+            '\n\t\t' + "var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;" +
+              //lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+            '\n\t\t' + "lc.src = 'http://localhost:3000/chat.js';" +
+            '\n\t\t' + "var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);" +
+            '\n\t' + "})();" +
+            '\n' + "<\/script>";
+}
+
+
 </script>
 
 <style lang="scss">
     .welcome-message {
-        
         &-container {
             width: 512px;
+        }
+
+        & .code-snippet-container {
+            position: relative;
+
+            &-button {
+                position: absolute;
+                right: 0;
+                top: 0;
+                cursor: pointer;
+                background: #9e9e9e;
+                color: white;
+                padding: 4px;
+                font-size: 14px;
+            }
+
+            #code-snippet {
+                padding: 16px;
+                background: #303030;
+                color: white;
+            }
         }
     }
 </style>
