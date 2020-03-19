@@ -59,8 +59,8 @@ const actions = {
             makeRequestToServer('/api/user/chat')
             .then(r => {
                 if(r.code == 200) {
-                    commit('setChatToken', r.user);
-                    return resolve();
+                    commit('setChatToken', r.chat_token);
+                    return resolve(r.chat_token);
                 }
                 else {
                     return reject();
