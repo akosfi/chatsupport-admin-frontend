@@ -58,7 +58,14 @@ export default {
 
       if(validationErrors.length > 0) return false;
 
-      this.$store.dispatch('user/loginUserAction', {username: this.username, password: this.password});
+      this.$store
+          .dispatch('user/loginUserAction', {username: this.username, password: this.password})
+          .then((r) => {
+            this.$router.push('/chat');
+          })
+          .catch(() => {
+            //Push validation errors to error list!
+          });;
 
     }
   }

@@ -1,39 +1,73 @@
 import { makeRequestToServer } from "../../util";
 
 const state = {
-    chatConnectionToken: '',
+    chatConnectionToken: null,
     user: null,
     identificationAttempted: false,
     loginErrors: [],
     registrationErrors: [],
 };
 
-const getters = {};
+const getters = {
+    isUserIdentified: (state) => {
+        return ((state.user != null) && state.identificationAttempted);
+    }
+};
 
 const actions = {
     registerUserAction ({commit, state}, user) {
-        makeRequestToServer('/api/user/register', {user}, 'POST')
-        .then(r => {
-            return commit('saveUserToStore', r.user);
+        return new Promise((resolve, reject) => {
+            makeRequestToServer('/api/user/register', user, 'POST')
+            .then(r => {
+                if(r.code === 200) {
+                    commit('saveUserToStore', r.user);
+                    return resolve();
+                }
+                return reject();
+            });
         });
     },
     loginUserAction({commit}, user){
-        makeRequestToServer('/api/user/login', user, 'POST')
-        .then(r => {
-            return commit('saveUserToStore', r.user);
+        return new Promise((resolve, reject) => {
+            makeRequestToServer('/api/user/login', user, 'POST')
+            .then(r => {
+                if(r.code === 200) {
+                    commit('saveUserToStore', r.user);
+                    return resolve();
+                }
+                return reject();
+            });
         });
+        
     },
     isUserLoggedInAction({commit}) {
-        makeRequestToServer('/api/user/me')
-        .then(r => {
-            commit('setIdentificationAttempted');
-            return commit('saveUserToStore', r.user);
+        return new Promise((resolve, reject) => {
+            makeRequestToServer('/api/user/me')
+            .then(r => {
+                if(r.code == 200) {
+                    commit('saveUserToStore', r.user);
+                    commit('setIdentificationAttempted');
+                    return resolve();
+                }
+                else {
+                    return reject();
+                }
+            });
         });
+        
     },
     getChatConnectionToken({commit}) {
-        makeRequestToServer('/api/user/chat')
-        .then(r => {
-            return commit('setChatToken', r.user);
+        return new Promise((resolve, reject) => {
+            makeRequestToServer('/api/user/chat')
+            .then(r => {
+                if(r.code == 200) {
+                    commit('setChatToken', r.user);
+                    return resolve();
+                }
+                else {
+                    return reject();
+                }
+            });
         });
     }
 };

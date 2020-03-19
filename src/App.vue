@@ -5,11 +5,28 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 
 export default {
   name: 'App',
   components: {
-  }
+  },
+  computed: {
+    ...mapGetters({
+      isUserIdentified: 'user/isUserIdentified',
+    }),
+  },
+  mounted: function () {
+    this.$store
+        .dispatch('user/isUserLoggedInAction')
+        .then(() => {
+          if(!this.isUserIdentified) {
+            return this.$router.push('/login');
+          }
+          return this.$router.push('/chat');
+        });
+  },
 }
 </script>
 

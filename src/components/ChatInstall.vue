@@ -3,7 +3,11 @@
         <div class="welcome-message-container">
             <h2 class="my-3">Install your Chat Client!</h2>
             <h5 class="my-3">1. Copy and paste this code before the closing <i>body</i> tag!</h5>
-            <pre><code id="code-snippet" class="language-html">Loading...</code></pre>
+            <div>
+                <pre id="code-snippet">
+
+                </pre>
+            </div>
             <h5 class="my-3">2. Reload your website!</h5>
         </div>
     </div>
@@ -16,11 +20,12 @@ export default {
   components: {
   },
   mounted: function() {
-        const code = '<div>\n' +
-                    '\t<p>There should be a better soulution for this...</p>'    + 
-                    '\n</div>'
-        const highlightedCode = hljs.highlightAuto(code).value;
-        document.getElementById('code-snippet').innerHTML = highlightedCode;
+        const code = '&lt;article&gt;' +
+        '&lt;h4&gt;A really awesome article&lt;/h4&gt;' +
+        '&lt;p&gt;Lots of awesome text.&lt;/p&gt;'+
+        "&lt;/article&gt;";
+        //const highlightedCode = hljs.highlightAuto(code).value;
+        document.getElementById('code-snippet').innerHTML = code;
   } 
 }
 </script>
