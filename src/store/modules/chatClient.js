@@ -20,9 +20,8 @@ const actions = {
             makeRequestToServer('/api/chat')
             .then(r => {
                 if(r.code === 200) {
-
-                    commit('saveClientToStore', r.client);
-                    commit('setUserHasClient', r.client);
+                    commit('saveClientToStore', r.chatClient);
+                    commit('setUserHasClient', r.chatClient);
                     return resolve();
                 }
                 return reject();
@@ -34,8 +33,8 @@ const actions = {
             makeRequestToServer('/api/chat', {}, 'POST')
             .then(r => {
                 if(r.code === 200) {
-                    commit('saveClientToStore', r.client);
-                    commit('setUserHasClient', r.client);
+                    commit('saveClientToStore', r.chatClient);
+                    commit('setUserHasClient', r.chatClient);
                     return resolve();
                 }
                 return reject();
@@ -44,11 +43,10 @@ const actions = {
     },
     getGuestsOfClientAction({commit, state}, clientId) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer(`/api/chat${clientId}/guest`)
+            makeRequestToServer(`/api/chat/${clientId}/guest`)
             .then(r => {
                 if(r.code === 200) {
-                    commit('saveClientToStore', r.client);
-                    commit('setUserHasClient', r.client);
+                    commit('saveGuestsToStore', r.guests);//!!!!!!!!!!!!!!!!4
                     return resolve();
                 }
                 return reject();

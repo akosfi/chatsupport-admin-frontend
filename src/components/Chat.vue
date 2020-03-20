@@ -13,18 +13,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   components: {
   },
   methods: {
 
   },
+  computed: {
+    ...mapGetters({
+        getClient: 'chatClient/getClient',
+    }),
+  },
   mounted: function() {
     this.$store
         .dispatch('chatClient/getClientAction')
         .then((r) => {
             this.$store
-                .dispatch('chatClient/getGuestsOfClientAction')
+                .dispatch('chatClient/getGuestsOfClientAction', this.getClient.id)
                 .then((g)=>{
 
                 });
