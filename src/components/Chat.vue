@@ -1,8 +1,11 @@
 <template>
     <div class="chat">
         <div class="chat-guests">
-            <div class="chat-guests-guest">
-                Guest1
+            <div 
+                class="chat-guests-guest"
+                v-for="guest in getGuests"
+                :key="guest.id">
+                Guest #{{guest.id}}
             </div>
             
         </div>
@@ -24,28 +27,11 @@ export default {
   computed: {
     ...mapGetters({
         getClient: 'chatClient/getClient',
+        getGuests: 'chatClient/getGuests',
     }),
   },
   mounted: function() {
-    this.$store
-        .dispatch('chatClient/getClientAction')
-        .then((r) => {
-            this.$store
-                .dispatch('chatClient/getGuestsOfClientAction', this.getClient.id)
-                .then((g)=>{
-
-                });
-        })
-        .catch((errors) => {
-            console.log(errors);
-            return this.$store.dispatch('chatClient/createClientAction');
-        })
-        .then((r) => {
-
-        })
-        .catch((errors) => {
-
-        });
+    
   },
 }
 </script>

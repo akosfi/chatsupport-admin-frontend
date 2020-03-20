@@ -1,10 +1,11 @@
 import {makeRequestToServer} from '../../util/';
-
+import _ from 'lodash';
 
 const state = {
     client: null,
     userHasClient: false,
     guests: [],
+    currentGuest: null,
 };
 const getters = {
     getGuests: state => {
@@ -13,28 +14,34 @@ const getters = {
     getClient: state => {
         return state.client;
     },
+    getCurrentGuest: state => {
+        return state.currentGuest;
+    }
 };
 const actions = {
-    getClientAction ({commit, state}) {
+    setClientAction({commit, state}, chatClient) {
+        commit('saveClientToStore', chatClient);
+        commit('setUserHasClient', chatClient);
+        return;
+    },
+    getClientAction ({dispatch, commit, state}) {
         return new Promise((resolve, reject) => {
             makeRequestToServer('/api/chat')
             .then(r => {
                 if(r.code === 200) {
-                    commit('saveClientToStore', r.chatClient);
-                    commit('setUserHasClient', r.chatClient);
+                    dispatch('setClientAction', r.chatClient);
                     return resolve();
                 }
                 return reject();
             });
         });
     },
-    createClientAction({commit, state}) {
+    createClientAction({dispatch, commit, state}) {
         return new Promise((resolve, reject) => {
             makeRequestToServer('/api/chat', {}, 'POST')
             .then(r => {
                 if(r.code === 200) {
-                    commit('saveClientToStore', r.chatClient);
-                    commit('setUserHasClient', r.chatClient);
+                    dispatch('setClientAction', r.chatClient);
                     return resolve();
                 }
                 return reject();
@@ -66,6 +73,11 @@ const mutations = {
     },
     addGuestToStore(state, guest) {
         state.guests = [...state.guests, guest];
+    },
+    setCurrentGuest(state, guestId) {
+        if(guestId === -1) return state.currentGuest = null;
+        const guest = _.find(state.guests, {id: guestId});
+        state.currentGuest = guest;
     }
 };
 

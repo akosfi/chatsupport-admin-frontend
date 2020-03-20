@@ -3,8 +3,15 @@
         <side-bar></side-bar>
         <div 
             class="panel-content" 
-            v-if="isIdentificationAttempted === true">
-            <chat></chat>
+            v-if="isIdentificationAttempted || isUserIdentified">
+
+            <chat
+                v-if="getGuests.length > 0"
+            ></chat>
+
+            <chat-install
+                v-if="getGuests.length === 0"
+            ></chat-install>
         </div>
     </div>
 </template>
@@ -24,7 +31,20 @@ export default {
   computed: {
     ...mapGetters({
         isIdentificationAttempted: 'user/isIdentificationAttempted',
+        isUserIdentified: 'user/isUserIdentified',
+        getClient: 'chatClient/getClient',
+        getGuests: 'chatClient/getGuests',
     }),
+  },
+  mounted: function() {
+      this.$store
+        .dispatch('chatClient/getClientAction')
+        .then((r) => {
+            return this.$store.dispatch('chatClient/getGuestsOfClientAction', this.getClient.id);
+        })
+        .catch(() => {
+            return this.$store.dispatch('chatClient/createClientAction');
+        });
   }
 }
 </script>

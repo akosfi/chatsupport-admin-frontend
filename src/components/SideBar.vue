@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
-        <div class="sidebar-item d-flex justify-content-center align-items-center">
-            CHATS
+        <div class="sidebar-item sidebar-item-active d-flex justify-content-center align-items-center">
+            <img src="https://image.flaticon.com/icons/svg/1380/1380338.svg" alt="Chats">
         </div>
     </div>
 </template>
@@ -16,12 +16,23 @@ export default {
 <style lang="scss">
     .sidebar {
         flex: 0 0 80px;
+        height: 100vh;
+        background: #f5f5f5;
         padding: 0;
 
         &-item {
             cursor: pointer;
             height: 80px;
-            background: palevioletred;
+            
+            & img {
+                height: 40px;
+                width: 40px;
+            }
+
+            &-active {
+                background: #a6a6a6;
+            }
         }
+
     }
 </style>
