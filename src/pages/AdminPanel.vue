@@ -1,8 +1,10 @@
 <template>
     <div class="panel">
         <side-bar></side-bar>
-        <div class="panel-content">
-            <chat-install></chat-install>
+        <div 
+            class="panel-content" 
+            v-if="isIdentificationAttempted === true">
+            <chat></chat>
         </div>
     </div>
 </template>
@@ -10,11 +12,19 @@
 <script>
 import SideBar from '../components/SideBar';
 import ChatInstall from '../components/ChatInstall';
+import Chat from '../components/Chat';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
       SideBar,
       ChatInstall,
+      Chat,
+  },
+  computed: {
+    ...mapGetters({
+        isIdentificationAttempted: 'user/isIdentificationAttempted',
+    }),
   }
 }
 </script>
@@ -29,22 +39,5 @@ export default {
         &-content {
             flex: 1 1 auto;
         }
-        /*
-        &-guests {
-            flex: 0 0 256px;
-            &-guest {
-                padding-left: 16px;
-                background: palegreen;
-                height: 48px;
-                display: flex;
-                align-items: center;
-                font-size: 24px;
-                cursor: pointer;
-            }
-        }
-
-        &-active {
-            flex: 0 0 auto;
-        }*/
     }
 </style>

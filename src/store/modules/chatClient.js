@@ -1,3 +1,6 @@
+import {makeRequestToServer} from '../../util/';
+
+
 const state = {
     client: null,
     userHasClient: false,
@@ -14,9 +17,10 @@ const getters = {
 const actions = {
     getClientAction ({commit, state}) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer('/api/chat-client/')
+            makeRequestToServer('/api/chat')
             .then(r => {
                 if(r.code === 200) {
+
                     commit('saveClientToStore', r.client);
                     commit('setUserHasClient', r.client);
                     return resolve();
@@ -27,7 +31,7 @@ const actions = {
     },
     createClientAction({commit, state}) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer('/api/chat-client/', {}, 'POST')
+            makeRequestToServer('/api/chat', {}, 'POST')
             .then(r => {
                 if(r.code === 200) {
                     commit('saveClientToStore', r.client);
@@ -38,9 +42,9 @@ const actions = {
             });
         });
     },
-    getGuestsOfClient({commit, state}, clientId) {
+    getGuestsOfClientAction({commit, state}, clientId) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer(`/api/chat-client/${clientId}/guest`)
+            makeRequestToServer(`/api/chat${clientId}/guest`)
             .then(r => {
                 if(r.code === 200) {
                     commit('saveClientToStore', r.client);

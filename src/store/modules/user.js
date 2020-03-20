@@ -9,6 +9,9 @@ const state = {
 const getters = {
     isUserIdentified: (state) => {
         return ((state.user != null) && state.identificationAttempted);
+    },
+    isIdentificationAttempted: (state) => {
+        return state.identificationAttempted;
     }
 };
 

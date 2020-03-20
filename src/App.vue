@@ -15,6 +15,7 @@ export default {
   computed: {
     ...mapGetters({
       isUserIdentified: 'user/isUserIdentified',
+      isIdentificationAttempted: 'user/isUserIdentificationAttempted',
     }),
   },
   mounted: function () {
@@ -40,6 +41,8 @@ export default {
             return this.$router.push('/login');
           } 
         });
+
+      
   },
 }
 </script>
