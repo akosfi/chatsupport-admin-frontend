@@ -17,10 +17,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import SideBar from '../components/SideBar';
 import ChatInstall from '../components/ChatInstall';
 import Chat from '../components/Chat';
-import { mapGetters } from 'vuex';
+
+import ChatSocket from '../socket';
 
 export default {
   components: {
@@ -37,7 +40,7 @@ export default {
     }),
   },
   mounted: function() {
-      this.$store
+    this.$store
         .dispatch('chatClient/getClientAction')
         .then((r) => {
             return this.$store.dispatch('chatClient/getGuestsOfClientAction', this.getClient.id);
@@ -45,7 +48,19 @@ export default {
         .catch(() => {
             return this.$store.dispatch('chatClient/createClientAction');
         });
-  }
+
+
+    this.$store
+        .dispatch('user/getChatConnectionToken')
+        .then(token => {
+            ChatSocket.chat_token = token;
+            ChatSocket.onChange = () => {};
+            //ChatSocket.onChange = (connected) => this.$store.dispatch('socket/changeConnectionStatus', {connected});
+            ChatSocket.onMessage = (message) => this.$store.dispatch('chat/addMessage', {message: message.message});
+            
+            ChatSocket.connect();
+        });
+    }
 }
 </script>
 

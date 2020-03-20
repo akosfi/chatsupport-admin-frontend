@@ -59,7 +59,7 @@ const actions = {
     },
     getChatConnectionToken({commit}) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer('/api/user/chat')
+            makeRequestToServer('/api/user/chat-token')
             .then(r => {
                 if(r.code == 200) {
                     commit('setChatToken', r.chat_token);
