@@ -12,6 +12,9 @@ const getters = {
     },
     isIdentificationAttempted: (state) => {
         return state.identificationAttempted;
+    },
+    getUser: (state) => {
+        return state.user;
     }
 };
 

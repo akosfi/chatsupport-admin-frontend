@@ -19,13 +19,16 @@
 <script>
 import { mapGetters } from 'vuex';
 
+
+import ChatSocket from '../socket';
+
 export default {
   components: {
   },
   methods: {
     setCurrentGuest: function(id) {
         this.$store
-            .dispatch('chatClient/setCurrentGuestAction', id)
+            .dispatch('client/setCurrentGuestAction', id)
             .then(() => {
                 
             });
@@ -33,12 +36,23 @@ export default {
   },
   computed: {
     ...mapGetters({
-        getClient: 'chatClient/getClient',
-        getGuests: 'chatClient/getGuests',
+        getClient: 'client/getClient',
+        getGuests: 'client/getGuests',
+        getUser: 'user/getUser',
     }),
   },
   mounted: function() {
-    
+    this.$store
+        .dispatch('user/getChatConnectionToken')
+        .then(token => {
+            ChatSocket.chat_token = token;
+            ChatSocket.user_id = this.getUser.id;
+            ChatSocket.onChange = () => {};
+            //ChatSocket.onChange = (connected) => this.$store.dispatch('socket/changeConnectionStatus', {connected});
+            ChatSocket.onMessage = (message) => this.$store.dispatch('chat/addMessage', {message: message.message});
+            
+            ChatSocket.connect();
+        });
   },
 }
 </script>

@@ -2,14 +2,14 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import user from './modules/user';
-import chatClient from './modules/chatClient';
+import client from './modules/client';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
         user,
-        chatClient,
+        client,
         //chat,
     },
     strict: true,

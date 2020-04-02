@@ -3,9 +3,9 @@
         <side-bar></side-bar>
         <div 
             class="panel-content" 
-            v-if="isIdentificationAttempted || isUserIdentified">
+            v-if="isIdentificationAttempted && isUserIdentified">
 
-            <div v-if="getGuests">
+            <div v-if="getClient && getGuests">
                 <chat
                     v-if="getGuests.length > 0"
                 ></chat>
@@ -25,7 +25,6 @@ import SideBar from '../components/SideBar';
 import ChatInstall from '../components/ChatInstall';
 import Chat from '../components/Chat';
 
-import ChatSocket from '../socket';
 
 export default {
   components: {
@@ -37,30 +36,19 @@ export default {
     ...mapGetters({
         isIdentificationAttempted: 'user/isIdentificationAttempted',
         isUserIdentified: 'user/isUserIdentified',
-        getClient: 'chatClient/getClient',
-        getGuests: 'chatClient/getGuests',
+        getClient: 'client/getClient',
+        getGuests: 'client/getGuests',
     }),
   },
   mounted: function() {
     this.$store
-        .dispatch('chatClient/getClientAction')
+        .dispatch('client/getClientAction')
         .then((r) => {
-            return this.$store.dispatch('chatClient/getGuestsOfClientAction', this.getClient.id);
+            return this.$store.dispatch('client/getGuestsOfClientAction', this.getClient.id);
         })
         .catch(() => {
-            return this.$store.dispatch('chatClient/createClientAction');
-        });
-
-
-    this.$store
-        .dispatch('user/getChatConnectionToken')
-        .then(token => {
-            ChatSocket.chat_token = token;
-            ChatSocket.onChange = () => {};
-            //ChatSocket.onChange = (connected) => this.$store.dispatch('socket/changeConnectionStatus', {connected});
-            ChatSocket.onMessage = (message) => this.$store.dispatch('chat/addMessage', {message: message.message});
-            
-            ChatSocket.connect();
+            return this.$store
+                .dispatch('client/createClientAction');
         });
     }
 }

@@ -7,6 +7,7 @@ class ChatSocket {
     constructor() {
         this.port = 3000;
         this.chat_token = null;
+        this.user_id = null;
         this.onChange = null;
         this.onMessage = null;
 
@@ -32,7 +33,7 @@ class ChatSocket {
     }
 
     _identify() {
-        this.socket.emit(IDENTIFY_USER, this.chat_token);
+        this.socket.emit(IDENTIFY_USER, {token: this.chat_token, id: this.user_id});
     }
 
     _onConnected() {

@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-        getClient: 'chatClient/getClient',
+        getClient: 'client/getClient',
     }),
   }
   

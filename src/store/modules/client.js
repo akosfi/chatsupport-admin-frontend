@@ -1,9 +1,8 @@
-import {makeRequestToServer} from '../../util/';
+import {makeRequestToServer} from '../../util';
 import _ from 'lodash';
 
 const state = {
     client: null,
-    userHasClient: false,
     guests: null,
     currentGuest: null,
 };
@@ -19,17 +18,16 @@ const getters = {
     }
 };
 const actions = {
-    setClientAction({commit, state}, chatClient) {
-        commit('saveClientToStore', chatClient);
-        commit('setUserHasClient', chatClient);
+    setClientAction({commit, state}, client) {
+        commit('saveClientToStore', client);
         return;
     },
     getClientAction ({dispatch, commit, state}) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer('/api/chat')
+            makeRequestToServer('/api/client')
             .then(r => {
                 if(r.code === 200) {
-                    dispatch('setClientAction', r.chatClient);
+                    dispatch('setClientAction', r.client);
                     return resolve();
                 }
                 return reject();
@@ -38,10 +36,11 @@ const actions = {
     },
     createClientAction({dispatch, commit, state}) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer('/api/chat', {}, 'POST')
+            makeRequestToServer('/api/client', {}, 'POST')
             .then(r => {
                 if(r.code === 200) {
-                    dispatch('setClientAction', r.chatClient);
+                    dispatch('setClientAction', r.client);
+                    commit('saveGuestsToStore', []);
                     return resolve();
                 }
                 return reject();
@@ -50,7 +49,7 @@ const actions = {
     },
     getGuestsOfClientAction({commit, state}, clientId) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer(`/api/chat/${clientId}/guest`)
+            makeRequestToServer(`/api/client/${clientId}/guest`)
             .then(r => {
                 if(r.code === 200) {
                     commit('saveGuestsToStore', r.guests);
@@ -67,9 +66,6 @@ const actions = {
 const mutations = {
     saveClientToStore(state, client){
         state.client = client;
-    },
-    setUserHasClient() {
-        state.userHasClient = true;
     },
     saveGuestsToStore(state, guests){
         state.guests = guests;
