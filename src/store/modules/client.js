@@ -77,7 +77,10 @@ const actions = {
         });
     },
     addMessageAction({commit, state}, message) {
-        commit('saveMessageToStore', message);
+        return new Promise((resolve, reject) => {
+            commit('saveMessageToStore', message);
+            resolve();
+        });
     },
 };
 const mutations = {

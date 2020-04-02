@@ -6,9 +6,7 @@
                 v-for="guest in getGuests"
                 v-on:click="setCurrentGuest(guest.id)"
                 :key="guest.id"
-                v-bind:class="{ 
-                    'chat-guests-guest-active': getCurrentGuest && getCurrentGuest.id == guest.id 
-                    }">
+                v-bind:class="isGuestCurrent(guest)">
                 Guest #{{guest.id}}
             </div>
             
@@ -17,7 +15,7 @@
             class="chat-messages"
             v-if="getCurrentGuest"
             >
-            <div class="chat-messages-list">
+            <div id="messages" class="chat-messages-list">
                 <div 
                     class="chat-messages-message"
                     v-bind:class="styleChatMessage(message)"
@@ -63,7 +61,7 @@ export default {
             this.$store
                 .dispatch('client/setCurrentGuestAction', id)
                 .then(() => {
-                    
+                   this.scrollToBottom();
                 });
         },
         styleChatMessage: function(message) {
@@ -76,6 +74,15 @@ export default {
             ChatSocket.sendIm({message: this.message, guest_id: this.getCurrentGuest.id});
             
             this.message = "";
+        },
+        isGuestCurrent: function(guest) {
+            return { 
+                'chat-guests-guest-active': this.getCurrentGuest && this.getCurrentGuest.id == guest.id 
+            };
+        },
+        scrollToBottom: function() {
+            var container = this.$el.querySelector("#messages");
+            container.scrollTop = container.scrollHeight;
         }
     },
     computed: {
@@ -94,8 +101,9 @@ export default {
             ChatSocket.chat_token = token;
             ChatSocket.user_id = this.getUser.id;
             ChatSocket.onChange = () => {};
-            //ChatSocket.onChange = (connected) => this.$store.dispatch('socket/changeConnectionStatus', {connected});
-            ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message);
+            ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message).then(() => {
+                this.scrollToBottom();
+            });
             
             ChatSocket.connect();
         });
@@ -131,20 +139,22 @@ export default {
         }
 
         &-messages {
-            overflow-y: hidden;
-            height: 100vh;
+            max-height: 100vh;
             width: 100%;
             background: #f5f5f5;
             display: flex;
             flex-direction: column;
 
             &-list {
-                flex: 1 0 auto;
+                overflow-y: scroll;
+                flex: 1 0 calc(100vh-48px);
             }
 
             &-input {
                 flex: 0 0 48px;
                 position: relative;
+                border-top: 1px solid black;
+
                 & input {
                     width: 100%;
                     border: none;
