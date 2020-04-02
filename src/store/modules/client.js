@@ -5,6 +5,7 @@ const state = {
     client: null,
     guests: null,
     currentGuest: null,
+    currentGuestMessages: null,
 };
 const getters = {
     getGuests: state => {
@@ -15,6 +16,9 @@ const getters = {
     },
     getCurrentGuest: state => {
         return state.currentGuest;
+    },
+    getCurrentGuestMessages: state => {
+        return state.currentGuestMessages;
     }
 };
 const actions = {
@@ -60,7 +64,17 @@ const actions = {
         });
     },
     setCurrentGuestAction({commit, state}, guestId) {
-        commit('setCurrentGuest', guestId);
+        return new Promise((resolve, reject) => {
+            makeRequestToServer(`/api/guest/${guestId}`)
+            .then(r => {
+                if(r.code === 200) {
+                    commit('setCurrentGuest', guestId);
+                    commit('saveGuestMessagesToStore', r.messages);
+                    return resolve();
+                }
+                return reject();
+            });
+        });
     },
 };
 const mutations = {
@@ -77,6 +91,9 @@ const mutations = {
         if(guestId === -1) return state.currentGuest = null;
         const guest = _.find(state.guests, {id: guestId});
         state.currentGuest = guest;
+    },
+    saveGuestMessagesToStore(state, messages) {
+        state.currentGuestMessages = messages;
     }
 };
 
