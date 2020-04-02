@@ -8,7 +8,7 @@ const state = {
 
 const getters = {
     isUserIdentified: (state) => {
-        return ((state.user != null) && state.identificationAttempted);
+        return (state.user != null);
     },
     isIdentificationAttempted: (state) => {
         return state.identificationAttempted;
@@ -45,9 +45,9 @@ const actions = {
         return new Promise((resolve, reject) => {
             makeRequestToServer('/api/user/me')
             .then(r => {
+                commit('setIdentificationAttempted');
                 if(r.code == 200) {
                     commit('saveUserToStore', r.user);
-                    commit('setIdentificationAttempted');
                     return resolve();
                 }
                 else {

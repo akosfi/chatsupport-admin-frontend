@@ -26,7 +26,7 @@ export default {
           if(this.$route.path !== '/login' && this.$route.path !== '/register'){
             return this.$router.push('/login');
           } 
-        });
+    });
 
       
   },

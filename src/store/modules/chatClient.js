@@ -4,7 +4,7 @@ import _ from 'lodash';
 const state = {
     client: null,
     userHasClient: false,
-    guests: [],
+    guests: null,
     currentGuest: null,
 };
 const getters = {
@@ -53,13 +53,16 @@ const actions = {
             makeRequestToServer(`/api/chat/${clientId}/guest`)
             .then(r => {
                 if(r.code === 200) {
-                    commit('saveGuestsToStore', r.guests);//!!!!!!!!!!!!!!!!4
+                    commit('saveGuestsToStore', r.guests);
                     return resolve();
                 }
                 return reject();
             });
         });
-    }
+    },
+    setCurrentGuestAction({commit, state}, guestId) {
+        commit('setCurrentGuest', guestId);
+    },
 };
 const mutations = {
     saveClientToStore(state, client){

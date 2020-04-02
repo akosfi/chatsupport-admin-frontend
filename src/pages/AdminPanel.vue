@@ -5,13 +5,15 @@
             class="panel-content" 
             v-if="isIdentificationAttempted || isUserIdentified">
 
-            <chat
-                v-if="getGuests.length > 0"
-            ></chat>
+            <div v-if="getGuests">
+                <chat
+                    v-if="getGuests.length > 0"
+                ></chat>
 
-            <chat-install
-                v-if="getGuests.length === 0"
-            ></chat-install>
+                <chat-install
+                    v-if="getGuests.length === 0"
+                ></chat-install>
+            </div> 
         </div>
     </div>
 </template>

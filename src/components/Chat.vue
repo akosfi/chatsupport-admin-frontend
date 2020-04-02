@@ -4,6 +4,7 @@
             <div 
                 class="chat-guests-guest"
                 v-for="guest in getGuests"
+                v-on:click="setCurrentGuest(guest.id)"
                 :key="guest.id">
                 Guest #{{guest.id}}
             </div>
@@ -22,7 +23,13 @@ export default {
   components: {
   },
   methods: {
-
+    setCurrentGuest: function(id) {
+        this.$store
+            .dispatch('chatClient/setCurrentGuestAction', id)
+            .then(() => {
+                
+            });
+    },
   },
   computed: {
     ...mapGetters({
