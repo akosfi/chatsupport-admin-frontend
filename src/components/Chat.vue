@@ -51,33 +51,43 @@ import { mapGetters } from 'vuex';
 import ChatSocket from '../socket';
 
 export default {
-  components: {
-  },
-  methods: {
-    setCurrentGuest: function(id) {
-        this.$store
-            .dispatch('client/setCurrentGuestAction', id)
-            .then(() => {
-                
-            });
-    },
-    styleChatMessage: function(message) {
+    data: function() {
         return {
-            'chat-messages-message-left': !message.from_admin,
-            'chat-messages-message-right': message.from_admin,
+            message: "",
         }
-    }
-  },
-  computed: {
-    ...mapGetters({
-        getClient: 'client/getClient',
-        getGuests: 'client/getGuests',
-        getCurrentGuest: 'client/getCurrentGuest',
-        getUser: 'user/getUser',
-        getMessages: 'client/getCurrentGuestMessages',
-    }),
-  },
-  mounted: function() {
+    },
+    components: {
+    },
+    methods: {
+        setCurrentGuest: function(id) {
+            this.$store
+                .dispatch('client/setCurrentGuestAction', id)
+                .then(() => {
+                    
+                });
+        },
+        styleChatMessage: function(message) {
+            return {
+                'chat-messages-message-left': !message.from_admin,
+                'chat-messages-message-right': message.from_admin,
+            }
+        },
+        sendChatMessage: function() {
+            ChatSocket.sendIm({message: this.message, guest_id: this.getCurrentGuest.id});
+            
+            this.message = "";
+        }
+    },
+    computed: {
+        ...mapGetters({
+            getClient: 'client/getClient',
+            getGuests: 'client/getGuests',
+            getCurrentGuest: 'client/getCurrentGuest',
+            getUser: 'user/getUser',
+            getMessages: 'client/getCurrentGuestMessages',
+        }),
+    },
+    mounted: function() {
     this.$store
         .dispatch('user/getChatConnectionToken')
         .then(token => {
@@ -85,11 +95,11 @@ export default {
             ChatSocket.user_id = this.getUser.id;
             ChatSocket.onChange = () => {};
             //ChatSocket.onChange = (connected) => this.$store.dispatch('socket/changeConnectionStatus', {connected});
-            ChatSocket.onMessage = (message) => this.$store.dispatch('chat/addMessage', {message: message.message});
+            ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message);
             
             ChatSocket.connect();
         });
-  },
+    },
 }
 </script>
 
@@ -134,7 +144,6 @@ export default {
 
             &-input {
                 flex: 0 0 48px;
-                background: red;
                 position: relative;
                 & input {
                     width: 100%;

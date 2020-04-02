@@ -76,6 +76,9 @@ const actions = {
             });
         });
     },
+    addMessageAction({commit, state}, message) {
+        commit('saveMessageToStore', message);
+    },
 };
 const mutations = {
     saveClientToStore(state, client){
@@ -94,6 +97,9 @@ const mutations = {
     },
     saveGuestMessagesToStore(state, messages) {
         state.currentGuestMessages = messages;
+    },
+    saveMessageToStore(state, message) {
+        state.currentGuestMessages.push(message);
     }
 };
 
