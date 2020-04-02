@@ -139,6 +139,7 @@ export default {
         }
 
         &-messages {
+            height: 100vh;
             max-height: 100vh;
             width: 100%;
             background: #f5f5f5;
@@ -147,7 +148,7 @@ export default {
 
             &-list {
                 overflow-y: scroll;
-                flex: 1 0 calc(100vh-48px);
+                flex: 1 0 auto;
             }
 
             &-input {
