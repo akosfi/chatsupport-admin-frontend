@@ -20,7 +20,7 @@ class ChatSocket {
         this._onError = this._onError.bind(this);
     }
     connect() {
-        const host = process.env.SOCKET_URL || `http://localhost:${this.port}`;
+        const host = process.env.VUE_APP_SERVER_URL;
         
         this.socket = io(host);
 

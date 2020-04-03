@@ -1,5 +1,5 @@
 export function makeRequestToServer(url, body, method) {
-    return fetch(`${url}`,{
+    return fetch(process.env.VUE_APP_SERVER_URL + url,{
         method: (method === 'POST') ? 'POST' : 'GET',
         body: JSON.stringify(body),
         credentials: 'include',
