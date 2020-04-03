@@ -9,7 +9,7 @@
                 <chat
                     v-if="getGuests.length > 0"
                 ></chat>
-
+                
                 <chat-install
                     v-if="getGuests.length === 0"
                 ></chat-install>

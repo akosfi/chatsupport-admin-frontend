@@ -25,6 +25,7 @@
 <script>
 import hljs from 'highlight.js';
 import { mapGetters } from 'vuex';
+import { getServerUrl } from '../util';
 
 export default {
   components: {
@@ -43,14 +44,17 @@ export default {
             document.body.removeChild(dummy);
         },
         codeToInstall(license) {
+            const url = getServerUrl();
             return "<script type='text/javascript'>" +
                 '\n\t' + "window.__lc = window.__lc || {};" +
                 '\n\t' + "window.__lc.license = " + license + ";" +
                 '\n\t' + "(function() {" +
                 '\n\t\t' + "var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;" +
-                //lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
-                '\n\t\t' + "lc.src = 'http://localhost:3000/chat.js';" +
+                '\n\t\t' + "lc.src = '" + url + "/chat/chat.js" +"';" +
                 '\n\t\t' + "var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);" +
+                '\n\t\t' + "var ls = document.createElement('link'); ls.type = 'text/css'; ls.rel = 'stylesheet';" +
+                '\n\t\t' + "ls.href = '" + url + "/chat/chat.css" +"';" +
+                '\n\t\t' + "document.head.appendChild(ls);" +
                 '\n\t' + "})();" +
                 '\n' + "<\/script>";
         }
