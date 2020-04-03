@@ -1,5 +1,8 @@
 export function makeRequestToServer(url, body, method) {
-    return fetch(process.env.VUE_APP_SERVER_URL + url,{
+
+    const _url = getServerUrl() + url;
+    
+    return fetch(_url ,{
         method: (method === 'POST') ? 'POST' : 'GET',
         body: JSON.stringify(body),
         credentials: 'include',
@@ -8,4 +11,14 @@ export function makeRequestToServer(url, body, method) {
         },
     })
     .then(response => response.json());
+}
+
+
+export const getServerUrl = () => {    
+    if(process.env.NODE_ENV === 'production') {
+        return process.env.VUE_APP_SERVER_URL;
+    }
+    else {
+        return "http://localhost:3000";
+    } 
 }

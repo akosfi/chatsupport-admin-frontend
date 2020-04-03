@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import Cookies from 'js-cookie';
+import {getServerUrl} from '../util';
 import {CONNECTED, DISCONNECTED, INCOMING_MESSAGE, IDENTIFY_USER} from './contsants';
 
 
@@ -20,7 +20,8 @@ class ChatSocket {
         this._onError = this._onError.bind(this);
     }
     connect() {
-        const host = process.env.VUE_APP_SERVER_URL;
+
+        const host = getServerUrl();
         
         this.socket = io(host);
 
