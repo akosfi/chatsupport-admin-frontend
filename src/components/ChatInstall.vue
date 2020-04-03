@@ -50,10 +50,10 @@ export default {
                 '\n\t' + "window.__lc.license = " + license + ";" +
                 '\n\t' + "(function() {" +
                 '\n\t\t' + "var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;" +
-                '\n\t\t' + "lc.src = '" + url + "/chat/chat.js" +"';" +
+                '\n\t\t' + "lc.src = '" + url + "/chat.js" +"';" +
                 '\n\t\t' + "var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);" +
                 '\n\t\t' + "var ls = document.createElement('link'); ls.type = 'text/css'; ls.rel = 'stylesheet';" +
-                '\n\t\t' + "ls.href = '" + url + "/chat/chat.css" +"';" +
+                '\n\t\t' + "ls.href = '" + url + "/chat.css" +"';" +
                 '\n\t\t' + "document.head.appendChild(ls);" +
                 '\n\t' + "})();" +
                 '\n' + "<\/script>";
