@@ -22,5 +22,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
+  },
+  "devDependencies": {
+    "dotenv-webpack": "^1.7.0"
   }
 }
