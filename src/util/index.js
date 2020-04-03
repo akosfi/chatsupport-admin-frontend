@@ -1,5 +1,5 @@
 export function makeRequestToServer(url, body, method) {
-    return fetch(`http://localhost:3000${url}`,{
+    return fetch(`${url}`,{
         method: (method === 'POST') ? 'POST' : 'GET',
         body: JSON.stringify(body),
         credentials: 'include',
