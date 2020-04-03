@@ -1,5 +1,8 @@
 <template>
-    <div class="chat">
+    <div 
+        class="chat"
+        v-if="isConnected"
+        >
         <div class="chat-guests">
             <div 
                 class="chat-guests-guest"
@@ -92,6 +95,7 @@ export default {
             getCurrentGuest: 'client/getCurrentGuest',
             getUser: 'user/getUser',
             getMessages: 'client/getCurrentGuestMessages',
+            isConnected: 'socket/isConnected',
         }),
     },
     mounted: function() {
@@ -100,7 +104,14 @@ export default {
         .then(token => {
             ChatSocket.chat_token = token;
             ChatSocket.user_id = this.getUser.id;
-            ChatSocket.onChange = () => {};
+            
+            ChatSocket.onChange = (data) => {
+                this.$store.dispatch('socket/connectionChangedAction', data);
+                if(data === false) {
+                    ChatSocket.connect();
+                }   
+            };
+
             ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message).then(() => {
                 this.scrollToBottom();
             });
