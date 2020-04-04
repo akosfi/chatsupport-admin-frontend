@@ -3,14 +3,16 @@
         class="chat"
         v-if="isConnected"
         >
-        <div class="chat-guests">
+        <div class="chat-guests list-group">
             <div 
-                class="chat-guests-guest"
+                class="chat-guests-guest list-group-item"
                 v-for="guest in getGuests"
                 v-on:click="setCurrentGuest(guest.id)"
                 :key="guest.id"
                 v-bind:class="isGuestCurrent(guest)">
                 Guest #{{guest.id}}
+
+                <span class="chat-guests-guest-notification">2</span>
             </div>
             
         </div>
@@ -80,7 +82,7 @@ export default {
         },
         isGuestCurrent: function(guest) {
             return { 
-                'chat-guests-guest-active': this.getCurrentGuest && this.getCurrentGuest.id == guest.id 
+                'active': this.getCurrentGuest && this.getCurrentGuest.id == guest.id 
             };
         },
         scrollToBottom: function() {
@@ -99,26 +101,26 @@ export default {
         }),
     },
     mounted: function() {
-    this.$store
-        .dispatch('user/getChatConnectionToken')
-        .then(token => {
-            ChatSocket.chat_token = token;
-            ChatSocket.user_id = this.getUser.id;
-            
-            ChatSocket.onChange = (data) => {
-                this.$store.dispatch('socket/connectionChangedAction', data);
-                if(data === false) {
-                    ChatSocket.connect();
-                }   
-            };
+        this.$store
+            .dispatch('user/getChatConnectionToken')
+            .then(token => {
+                ChatSocket.chat_token = token;
+                ChatSocket.user_id = this.getUser.id;
+                
+                ChatSocket.onChange = (data) => {
+                    this.$store.dispatch('socket/connectionChangedAction', data);
+                    if(data === false) {
+                        ChatSocket.connect();
+                    }   
+                };
 
-            ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message).then(() => {
-                this.scrollToBottom();
+                ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message).then(() => {
+                    this.scrollToBottom();
+                });
+                
+                ChatSocket.connect();
             });
-            
-            ChatSocket.connect();
-        });
-    },
+        },
 }
 </script>
 
@@ -135,16 +137,22 @@ export default {
         &-guests {
             flex: 0 0 20%;
             &-guest {
-                padding-left: 16px;
-                height: 48px;
-                display: flex;
-                align-items: center;
-                font-size: 24px;
                 cursor: pointer;
-                border: 1px solid black;
+                position: relative;
 
-                &-active {
-                    background: gray;
+                &-notification {
+                    background: red;
+                    color: white;
+                    border-radius: 100%;
+                    position: absolute;
+                    right: 8px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
         }
@@ -165,7 +173,7 @@ export default {
             &-input {
                 flex: 0 0 48px;
                 position: relative;
-                border-top: 1px solid black;
+                border-top: 1px solid lightslategrey;
 
                 & input {
                     width: 100%;
