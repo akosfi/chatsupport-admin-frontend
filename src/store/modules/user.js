@@ -58,14 +58,14 @@ const actions = {
         return new Promise((resolve, reject) => {
             makeRequestToServer('/api/user/me')
             .then(r => {
-                commit('setIdentificationAttempted');
                 if(r.code == 200) {
                     commit('saveUserToStore', r.user);
+                    commit('setIdentificationAttempted');
                     return resolve();
                 }
-                else {
-                    return reject();
-                }
+                commit('setIdentificationAttempted');
+                return reject();
+
             });
         });
         

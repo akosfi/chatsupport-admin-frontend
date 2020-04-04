@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import AdminPanel from '../pages/AdminPanel';
+import Chat from '../components/Chat';
+import ChatAdmins from '../components/ChatAdmins';
 
 import store from '../store';
 
@@ -20,17 +22,18 @@ export default new VueRouter({
             component: Register
         },
         {
-            path: '/chat',
+            path: '/',
             component: AdminPanel,
-            beforeEnter: requireAuth,
+            children: [
+                {
+                    path: '/chat',
+                    component: Chat
+                },
+                {
+                    path: '/admins',
+                    component: ChatAdmins
+                },
+            ],
         },
     ]
 });
-
-
-function requireAuth(to, from, next) {
-   if(store.getters['user/isIdentificationAttempted']) {
-       return next();
-   }
-   return next('/login');
-}

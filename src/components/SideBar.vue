@@ -1,6 +1,7 @@
 <template>
     <div class="sidebar list-group">
         <div 
+            v-on:click="navigateTo('/chat')"
             v-bind:class="{'active': isItemActive('/chat')}"
             class="sidebar-item list-group-item d-flex justify-content-center align-items-center">
             <svg class="bi bi-envelope" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -11,6 +12,7 @@
         </div>
 
         <div 
+            v-on:click="navigateTo('/admins')"
             v-bind:class="{'active': isItemActive('/admins')}"
             class="sidebar-item list-group-item d-flex justify-content-center align-items-center">
             <svg class="bi bi-person" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -33,6 +35,9 @@
 export default {
   components: {
   },
+  mounted: function() {
+      console.log("hi");
+  },
   methods: {
       isItemActive(route) {
           return route === this.$route.path;
@@ -44,8 +49,11 @@ export default {
                 return this.$store.dispatch('user/logoutUserAction'); 
             })
             .then(() => {
-                this.$router.push('/login');
+                this.navigateTo('/login');
             });
+      },
+      navigateTo: function(url){
+        this.$router.push(url);
       }
   }
 }

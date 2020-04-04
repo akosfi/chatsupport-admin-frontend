@@ -1,6 +1,8 @@
 <template>
     <div class="">
-      <router-view></router-view>
+      <router-view
+        v-if="isIdentificationAttempted"
+      ></router-view>
     </div>
 </template>
 
@@ -14,21 +16,14 @@ export default {
   computed: {
     ...mapGetters({
       isUserIdentified: 'user/isUserIdentified',
+      isIdentificationAttempted: 'user/isIdentificationAttempted',
     }),
   },
   mounted: function () {
     this.$store
         .dispatch('user/isUserLoggedInAction')
-        .then(() => {
-          this.$router.push('/chat');
-        })
-        .catch(() => {
-          if(this.$route.path !== '/login' && this.$route.path !== '/register'){
-            return this.$router.push('/login');
-          } 
-    });
-
-      
+        .then(() => {})
+        .catch(() => this.$router.push('/login'));
   },
 }
 </script>

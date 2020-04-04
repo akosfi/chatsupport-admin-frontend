@@ -1,7 +1,7 @@
 <template>
     <div 
         class="chat"
-        v-if="isConnected"
+        v-if="isConnected && getGuests && getGuests.length > 0"
         >
         <div class="chat-guests list-group">
             <div 

@@ -4,21 +4,7 @@
         <div 
             class="panel-content" 
             v-if="isIdentificationAttempted && isUserIdentified && getClient">
-
-            <div v-if="false">
-                <div v-if="getClient && getGuests">
-                    <chat
-                        v-if="getGuests.length > 0"
-                    ></chat>
-                    
-                    <chat-install
-                        v-if="getGuests.length === 0"
-                    ></chat-install>
-                </div>
-            </div> 
-            <div>
-                <chat-admins></chat-admins>
-            </div>
+            <router-view></router-view>
         </div>
     </div>
 </template>
