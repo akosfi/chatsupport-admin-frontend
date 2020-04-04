@@ -19,6 +19,7 @@
         </div>
 
         <div
+            v-on:click="logout"
             class="sidebar-item sidebar-item-last list-group-item d-flex justify-content-center align-items-center">
             <svg class="bi bi-power" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M5.578 4.437a5 5 0 104.922.044l.5-.866a6 6 0 11-5.908-.053l.486.875z" clip-rule="evenodd"/>
@@ -35,6 +36,16 @@ export default {
   methods: {
       isItemActive(route) {
           return route === this.$route.path;
+      },
+      logout() {
+        this.$store
+            .dispatch('socket/disconnectAction')
+            .then(() => {
+                return this.$store.dispatch('user/logoutUserAction'); 
+            })
+            .then(() => {
+                this.$router.push('/login');
+            });
       }
   }
 }

@@ -59,6 +59,14 @@ const actions = {
             socket.emit(IDENTIFY_USER, {token: state.chat_token, id: state.user_id});
             resolve();
         });
+    },
+    disconnectAction({commit, state}) {
+        return new Promise((resolve) => {
+            socket.disconnect();
+            socket = null;
+            commit('resetSocket');
+            resolve();
+        });
     }
 }
 
@@ -71,6 +79,12 @@ const mutations = {
         state.triedConnecting = true;
         state.connected = connected;
     },
+    resetSocket() {
+        state.connected = false;
+        state.triedConnecting = false;
+        state.user_id = null;
+        state.chat_token = null;
+    }
     
 }
 

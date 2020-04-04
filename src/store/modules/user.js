@@ -44,6 +44,16 @@ const actions = {
         });
         
     },
+    logoutUserAction({commit}, user){
+        return new Promise((resolve, reject) => {
+            makeRequestToServer('/api/user/logout')
+            .then(r => {
+                commit('deleteUser');
+                resolve();
+            });
+        });
+        
+    },
     isUserLoggedInAction({commit}) {
         return new Promise((resolve, reject) => {
             makeRequestToServer('/api/user/me')
@@ -88,6 +98,11 @@ const mutations = {
     },
     setChatToken(state, token) {
         state.chatConnectionToken = token;
+    },
+    deleteUser(state){
+        state.user = null;
+        state.identificationAttempted = false;
+        state.chatConnectionToken = null;
     }
 };
 
