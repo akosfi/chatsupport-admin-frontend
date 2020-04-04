@@ -3,17 +3,22 @@
         <side-bar></side-bar>
         <div 
             class="panel-content" 
-            v-if="isIdentificationAttempted && isUserIdentified">
+            v-if="isIdentificationAttempted && isUserIdentified && getClient">
 
-            <div v-if="getClient && getGuests">
-                <chat
-                    v-if="getGuests.length > 0"
-                ></chat>
-                
-                <chat-install
-                    v-if="getGuests.length === 0"
-                ></chat-install>
+            <div v-if="false">
+                <div v-if="getClient && getGuests">
+                    <chat
+                        v-if="getGuests.length > 0"
+                    ></chat>
+                    
+                    <chat-install
+                        v-if="getGuests.length === 0"
+                    ></chat-install>
+                </div>
             </div> 
+            <div>
+                <chat-admins></chat-admins>
+            </div>
         </div>
     </div>
 </template>
@@ -24,6 +29,7 @@ import { mapGetters } from 'vuex';
 import SideBar from '../components/SideBar';
 import ChatInstall from '../components/ChatInstall';
 import Chat from '../components/Chat';
+import ChatAdmins from '../components/ChatAdmins';
 
 
 export default {
@@ -31,6 +37,7 @@ export default {
         SideBar,
         ChatInstall,
         Chat,
+        ChatAdmins,
     },
     computed: {
         ...mapGetters({
