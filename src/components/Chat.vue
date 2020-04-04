@@ -50,9 +50,6 @@
 <script>
 import { mapGetters } from 'vuex';
 
-
-import ChatSocket from '../socket';
-
 export default {
     data: function() {
         return {
@@ -64,10 +61,7 @@ export default {
     methods: {
         setCurrentGuest: function(id) {
             this.$store
-                .dispatch('client/setCurrentGuestAction', id)
-                .then(() => {
-                   this.scrollToBottom();
-                });
+                .dispatch('client/setCurrentGuestAction', id);
         },
         styleChatMessage: function(message) {
             return {
@@ -76,7 +70,8 @@ export default {
             }
         },
         sendChatMessage: function() {
-            ChatSocket.sendIm({message: this.message, guest_id: this.getCurrentGuest.id});
+            if(!this.message) return;
+            this.$store.dispatch('socket/sendMessageAction', {message: this.message, guest_id: this.getCurrentGuest.id});
             
             this.message = "";
         },
@@ -86,7 +81,9 @@ export default {
             };
         },
         scrollToBottom: function() {
+            if(!this.$el.querySelector) return;
             var container = this.$el.querySelector("#messages");
+            if(!container) return;
             container.scrollTop = container.scrollHeight;
         }
     },
@@ -98,29 +95,33 @@ export default {
             getUser: 'user/getUser',
             getMessages: 'client/getCurrentGuestMessages',
             isConnected: 'socket/isConnected',
+            hasTriedConnecting: 'socket/hasTriedConnecting',
         }),
+    },
+    watch: {
+        isConnected: function(val) {
+            if(this.hasTriedConnecting) {
+                if(val === false) {
+                    this.$store.dispatch('socket/connectAction');
+                }
+            }
+        }
     },
     mounted: function() {
         this.$store
             .dispatch('user/getChatConnectionToken')
             .then(token => {
-                ChatSocket.chat_token = token;
-                ChatSocket.user_id = this.getUser.id;
-                
-                ChatSocket.onChange = (data) => {
-                    this.$store.dispatch('socket/connectionChangedAction', data);
-                    if(data === false) {
-                        ChatSocket.connect();
-                    }   
-                };
-
-                ChatSocket.onMessage = (data) => this.$store.dispatch('client/addMessageAction', data.message).then(() => {
-                    this.scrollToBottom();
-                });
-                
-                ChatSocket.connect();
+                this.$store
+                    .dispatch('socket/setCredentialsAction', {user_id: this.getUser.id, chat_token: token})
+                    .then(() => {
+                        this.$store.dispatch('socket/connectAction');
+                    });
             });
-        },
+    },
+
+    updated: function() {
+        this.scrollToBottom();
+    },
 }
 </script>
 
