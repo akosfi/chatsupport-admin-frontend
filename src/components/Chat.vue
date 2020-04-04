@@ -159,7 +159,7 @@ export default {
 
             &-list {
                 overflow-y: scroll;
-                flex: 1 0 auto;
+                flex: 0 0 calc(#{100%} - #{48px});
             }
 
             &-input {
