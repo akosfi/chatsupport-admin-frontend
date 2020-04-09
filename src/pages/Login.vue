@@ -58,25 +58,25 @@ export default {
   methods: {
     submitForm: function(e) {
       e.preventDefault();
-      const validationErrors = [];
+      this.validationErrors = [];
+      const _errors = [];
       if(!this.username) {
-        validationErrors.push("Username cannot be empty!");
+        _errors.push("Username cannot be empty!");
       }
       if(!this.password) {
-        validationErrors.push("Password cannot be empty!");
+        _errors.push("Password cannot be empty!");
       }
 
-      if(validationErrors.length > 0) return this.validationErrors = validationErrors;
+      if(_errors.length > 0) return this.validationErrors = _errors;
 
       this.$store
           .dispatch('user/loginUserAction', {username: this.username, password: this.password})
           .then((r) => {
             this.$router.push('/chat');
           })
-          .catch((errors) => {
-            //Push validation errors to error list!
-          });;
-
+          .catch((r) => {
+            this.validationErrors.push(r.message);
+          });
     }
   }
 }

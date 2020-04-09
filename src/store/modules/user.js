@@ -25,9 +25,9 @@ const actions = {
             .then(r => {
                 if(r.code === 200) {
                     commit('saveUserToStore', r.user);
-                    return resolve();
+                    return resolve(r);
                 }
-                return reject();
+                return reject(r);
             });
         });
     },
@@ -37,9 +37,9 @@ const actions = {
             .then(r => {
                 if(r.code === 200) {
                     commit('saveUserToStore', r.user);
-                    return resolve();
+                    return resolve(r);
                 }
-                return reject();
+                return reject(r);
             });
         });
         

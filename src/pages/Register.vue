@@ -82,35 +82,37 @@ export default {
   methods: {
     submitForm: function(e) {
       e.preventDefault();
-      const validationErrors = [];
+      this.validationErrors = [];
       if(!this.username) {
-        validationErrors.push("Name cannot be empty!");
+        this.validationErrors.push("Name cannot be empty!");
       }
       if(!this.password) {
-        validationErrors.push("Password cannot be empty!");
+        this.validationErrors.push("Password cannot be empty!");
       }
       if(!this.repeatedPassword) {
-        validationErrors.push("Repeated Password cannot be empty!");
+        this.validationErrors.push("Repeated Password cannot be empty!");
       }
       if(!this.email) {
-        validationErrors.push("Email cannot be empty!");
+        this.validationErrors.push("Email cannot be empty!");
       }
       if(this.password !== this.repeatedPassword) {
-        validationErrors.push("Passwords do not match!");
+        this.validationErrors.push("Passwords do not match!");
       }
 
-      if(validationErrors.length > 0) return this.validationErrors = validationErrors;
+      if(this.validationErrors.length > 0) return;
 
-      this.$store.dispatch('user/registerUserAction', {
-        username: this.username,
-        password: this.password,
-        email: this.email,
-      }).then(()=>{
-        this.$router.push('/login');
-      })
-      .catch(() => {
-        //push vlaidation erros to list
-      });
+      this.$store
+          .dispatch('user/registerUserAction', {
+            username: this.username,
+            password: this.password,
+            email: this.email,
+          })
+          .then(()=>{
+            this.$router.push('/login');
+          })
+          .catch((r) => {
+            this.validationErrors.push(r.message);
+          });
 
     }
   }
