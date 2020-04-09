@@ -1,3 +1,5 @@
+import router from '../router';
+
 export function makeRequestToServer(url, body, method) {
 
     const _url = getServerUrl() + url;
@@ -10,7 +12,12 @@ export function makeRequestToServer(url, body, method) {
             'Content-Type': 'application/json',
         },
     })
-    .then(response => response.json());
+    .then(response => {
+        if(response.status === "401") {
+            return router.push('/login');
+        }
+        return response.json();
+    });
 }
 
 
