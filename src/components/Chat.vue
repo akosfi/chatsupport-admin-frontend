@@ -1,58 +1,64 @@
 <template>
-    <div 
-        class="chat"
-        v-if="isConnected && getGuests && getGuests.length > 0"
-        >
-        <div class="chat-guests list-group">
-            <div 
-                class="chat-guests-guest list-group-item"
-                v-for="guest in getGuests"
-                v-on:click="setCurrentGuest(guest.id)"
-                :key="guest.id"
-                v-bind:class="isGuestCurrent(guest)">
-                Guest #{{guest.id}}
-
-                <span 
-                    v-if="getUnseenCount(guest.id) != 0"
-                    class="chat-guests-guest-notification">
-                    {{getUnseenCount(guest.id)}}
-                    </span>
-            </div>
-            
+    <div v-if="getGuests">
+        <div v-if="getGuests.length <= 0">
+            <chat-install></chat-install>
         </div>
         <div 
-            class="chat-messages"
-            v-if="getCurrentGuest"
-            >
-            <div id="messages" class="chat-messages-list">
+            v-if="isConnected && getGuests.length > 0"
+            class="chat">
+
+            <div class="chat-guests list-group">
                 <div 
-                    class="chat-messages-message"
-                    v-bind:class="styleChatMessage(message)"
-                    v-for="message in getMessages"
-                    :key="message.id"
-                    >
-                    <span>{{message.message}}</span>
+                    class="chat-guests-guest list-group-item"
+                    v-for="guest in getGuests"
+                    v-on:click="setCurrentGuest(guest.id)"
+                    :key="guest.id"
+                    v-bind:class="isGuestCurrent(guest)">
+                    Guest #{{guest.id}}
+
+                    <span 
+                        v-if="getUnseenCount(guest.id) != 0"
+                        class="chat-guests-guest-notification">
+                        {{getUnseenCount(guest.id)}}
+                        </span>
+                </div>
                 
-                </div>
             </div>
-            <div class="chat-messages-input">
-                <input 
-                    v-model="message"
-                    v-on:keyup.enter="sendChatMessage"
-                    placeholder="Enter message!">
-                <div 
-                    class="chat-messages-input-send"
-                    v-on:click="sendChatMessage">
-                    <img src="https://image.flaticon.com/icons/svg/481/481673.svg" alt="">
+            <div 
+                class="chat-messages"
+                v-if="getCurrentGuest"
+                >
+                <div id="messages" class="chat-messages-list">
+                    <div 
+                        class="chat-messages-message"
+                        v-bind:class="styleChatMessage(message)"
+                        v-for="message in getMessages"
+                        :key="message.id"
+                        >
+                        <span>{{message.message}}</span>
+                    
+                    </div>
                 </div>
+                <div class="chat-messages-input">
+                    <input 
+                        v-model="message"
+                        v-on:keyup.enter="sendChatMessage"
+                        placeholder="Enter message!">
+                    <div 
+                        class="chat-messages-input-send"
+                        v-on:click="sendChatMessage">
+                        <img src="https://image.flaticon.com/icons/svg/481/481673.svg" alt="">
+                    </div>
+                </div>
+                
             </div>
-            
         </div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import ChatInstall from './ChatInstall';
 
 export default {
     data: function() {
@@ -61,6 +67,7 @@ export default {
         }
     },
     components: {
+        ChatInstall
     },
     methods: {
         setCurrentGuest: function(id) {

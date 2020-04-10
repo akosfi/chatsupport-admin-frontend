@@ -44,7 +44,7 @@ const actions = {
         });
         
     },
-    logoutUserAction({commit}, user){
+    logoutUserAction({commit, dispatch}, user){
         return new Promise((resolve, reject) => {
             makeRequestToServer('/api/user/logout')
             .then(r => {
@@ -101,7 +101,6 @@ const mutations = {
     },
     deleteUser(state){
         state.user = null;
-        state.identificationAttempted = false;
         state.chatConnectionToken = null;
     }
 };
