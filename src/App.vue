@@ -23,7 +23,11 @@ export default {
     this.$store
         .dispatch('user/isUserLoggedInAction')
         .then(() => {})
-        .catch(() => this.$router.push('/login'));
+        .catch(() => {
+          if(this.$route.path != "/login" && this.$route.path != "/register") {
+            this.$router.push('/login');
+          }
+        });
   },
 }
 </script>
