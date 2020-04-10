@@ -12,7 +12,11 @@
                 v-bind:class="isGuestCurrent(guest)">
                 Guest #{{guest.id}}
 
-                <span class="chat-guests-guest-notification">2</span>
+                <span 
+                    v-if="getUnseenCount(guest.id) != 0"
+                    class="chat-guests-guest-notification">
+                    {{getUnseenCount(guest.id)}}
+                    </span>
             </div>
             
         </div>
@@ -92,6 +96,7 @@ export default {
             getClient: 'client/getClient',
             getGuests: 'client/getGuests',
             getCurrentGuest: 'client/getCurrentGuest',
+            getUnseenCount: 'client/getUnseenMessageCountForGuest',
             getUser: 'user/getUser',
             getMessages: 'client/getCurrentGuestMessages',
             isConnected: 'socket/isConnected',

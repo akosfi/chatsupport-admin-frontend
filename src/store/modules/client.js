@@ -6,6 +6,7 @@ const state = {
     guests: null,
     currentGuest: null,
     currentGuestMessages: null,
+    unseenMessagesCount: null,
 };
 const getters = {
     getGuests: state => {
@@ -19,6 +20,12 @@ const getters = {
     },
     getCurrentGuestMessages: state => {
         return state.currentGuestMessages;
+    },
+    getUnseenMessageCountForGuest: state => id => {
+        if(!state.unseenMessagesCount) return 0;
+        const guest = state.unseenMessagesCount.find(g => g.id === id);
+        if(!guest) return 0;
+        return state.unseenMessagesCount.find(g => g.id === id).messageCount;
     }
 };
 const actions = {
@@ -63,25 +70,49 @@ const actions = {
             });
         });
     },
-    setCurrentGuestAction({commit, state}, guestId) {
+    getUnseenMessagesOfClient({commit, state}, clientId) {
         return new Promise((resolve, reject) => {
-            makeRequestToServer(`/api/guest/${guestId}`)
+            makeRequestToServer(`/api/client/${clientId}/unseen`)
             .then(r => {
                 if(r.code === 200) {
-                    commit('setCurrentGuest', guestId);
-                    commit('saveGuestMessagesToStore', r.messages);
+                    commit('saveUnseenMessagesToStore', r.guests);
                     return resolve();
                 }
                 return reject();
             });
         });
     },
-    addMessageAction({commit, state}, message) {
+    setCurrentGuestAction({commit, dispatch}, guestId) {
         return new Promise((resolve, reject) => {
+            makeRequestToServer(`/api/guest/${guestId}`)
+            .then(r => {
+                if(r.code === 200) {
+                    commit('setCurrentGuest', guestId);
+                    commit('saveGuestMessagesToStore', r.messages);
+
+                    r.messages.forEach((message) => {
+                        dispatch('socket/setMessageSeenAction', message, {root: true});
+                    });
+
+                    return resolve();
+                }
+                return reject();
+            });
+        });
+    },
+    addMessageAction({commit, state, dispatch}, message) {
+        return new Promise((resolve, reject) => {
+            dispatch('getUnseenMessagesOfClient', state.client.id);
             commit('saveMessageToStore', message);
             resolve();
         });
     },
+    setMessageSeenAction({commit, state}, message) {
+        return new Promise((resolve, reject) => {
+            commit('setMessageSeen', message);
+            resolve();
+        });
+    }
 };
 const mutations = {
     saveClientToStore(state, client){
@@ -102,7 +133,14 @@ const mutations = {
         state.currentGuestMessages = messages;
     },
     saveMessageToStore(state, message) {
+        if(message.guest_user_id !== state.currentGuest.id) return;
         state.currentGuestMessages.push(message);
+    },
+    setMessageSeen(state, message) {
+        state.currentGuestMessages.find(m => m.id === message.id).seen = true;
+    },
+    saveUnseenMessagesToStore(state, messages) {
+        state.unseenMessagesCount = messages;
     }
 };
 

@@ -44,6 +44,7 @@ export default {
         this.$store
             .dispatch('client/getClientAction')
             .then((r) => {
+                this.$store.dispatch('client/getUnseenMessagesOfClient', this.getClient.id);
                 return this.$store.dispatch('client/getGuestsOfClientAction', this.getClient.id);
             })
             .catch(() => {

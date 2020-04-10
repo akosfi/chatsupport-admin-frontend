@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import {getServerUrl} from '../../util';
-import {CONNECTED, DISCONNECTED, INCOMING_MESSAGE, IDENTIFY_USER} from '../../socket/contsants';
+import {CONNECTED, DISCONNECTED, INCOMING_MESSAGE, INCOMING_MESSAGE_SEEN, IDENTIFY_USER} from '../../socket/contsants';
 
 let socket;
 
@@ -51,6 +51,13 @@ const actions = {
     sendMessageAction({commit, state}, message) {
         return new Promise((resolve) => {
             socket.emit(INCOMING_MESSAGE, message);
+            resolve();
+        });
+    },
+    setMessageSeenAction({commit, dispatch}, message) {
+        return new Promise((resolve) => {
+            socket.emit(INCOMING_MESSAGE_SEEN, {message});
+            dispatch('client/setMessageSeenAction', message, {root:true});
             resolve();
         });
     },
