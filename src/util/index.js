@@ -5,7 +5,7 @@ export function makeRequestToServer(url, body, method) {
     const _url = getServerUrl() + url;
     
     return fetch(_url ,{
-        method: (method === 'POST') ? 'POST' : 'GET',
+        method: method ? method : 'GET',
         body: JSON.stringify(body),
         credentials: 'include',
         headers: {

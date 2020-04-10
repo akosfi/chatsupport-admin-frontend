@@ -101,6 +101,7 @@ export default {
             getMessages: 'client/getCurrentGuestMessages',
             isConnected: 'socket/isConnected',
             hasTriedConnecting: 'socket/hasTriedConnecting',
+            getGuests: 'client/getGuests',
         }),
     },
     watch: {
@@ -110,7 +111,7 @@ export default {
                     this.$store.dispatch('socket/connectAction');
                 }
             }
-        }
+        },
     },
     mounted: function() {
         this.$store

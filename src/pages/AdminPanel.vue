@@ -30,15 +30,7 @@ export default {
             isIdentificationAttempted: 'user/isIdentificationAttempted',
             isUserIdentified: 'user/isUserIdentified',
             getClient: 'client/getClient',
-            getGuests: 'client/getGuests',
         }),
-    },
-    watch: {
-        getGuests: function(guests) {
-            if(guests.length > 0) {
-                this.$store.dispatch('client/setCurrentGuestAction', guests[0].id)
-            }
-        },
     },
     mounted: function() {
         this.$store

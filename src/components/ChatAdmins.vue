@@ -1,6 +1,13 @@
 <template>
     <div class="admins">
         <div class="admins-input">
+            <div 
+                v-for="error in validationErrors"
+                :key="error"
+                class="alert alert-danger"
+                role="alert">
+                {{error}}
+            </div>
             <div class="form-group">
                 <label for="input">Add new admin</label>
                 <input v-model="email" type="email" class="form-control" id="input" placeholder="Enter email">
@@ -31,6 +38,7 @@ export default {
     data: function() {
         return {
             email: '',
+            validationErrors: [],
         };
     },
     computed: {
@@ -47,18 +55,20 @@ export default {
     },
     methods: {
         addEmail() {
+            this.validationErrors = [];
             if(!this.email) return;
             this.$store
                 .dispatch('admin/addAdminAction', {email: this.email, clientId: this.getClient.id})
                 .then(() => {
                     this.email = '';
+                })
+                .catch((r) => {
+                    this.validationErrors.push(r.message);
                 });
         },
         removeAdmin(id) {
-            return function() {
-                this.$store
+            this.$store
                     .dispatch('admin/removeAdminAction', {id, clientId: this.getClient.id});
-            }
         }
     }
 }

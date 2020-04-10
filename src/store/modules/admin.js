@@ -32,9 +32,22 @@ const actions = {
             .then(r => {
                 if(r.code === 200) {
                     commit('addAdmin', r.admin);
-                    return resolve();
+                    return resolve(r);
                 }
-                return reject();
+                return reject(r);
+            });
+        });
+    },
+    removeAdminAction({commit, state}, {id, clientId}){
+        const admin = state.admins.find(a => a.id === id);
+        return new Promise((resolve, reject) => {
+            makeRequestToServer(`/api/client/${clientId}/admin`, {admin}, 'DELETE')
+            .then(r => {
+                if(r.code === 200) {
+                    commit('removeAdmin', admin);
+                    return resolve(r);
+                }
+                return reject(r);
             });
         });
     }
@@ -45,6 +58,9 @@ const mutations = {
     },
     addAdmin (state, admin) {
         state.admins.push(admin);
+    },
+    removeAdmin (state, admin) {
+        state.admins = state.admins.filter(a => a.id != admin.id);
     }
 };
 
