@@ -26,9 +26,14 @@
             </div>
             <div 
                 class="chat-messages"
-                v-if="getCurrentGuest"
+                v-if="getCurrentGuest && getMessages"
                 >
                 <div id="messages" class="chat-messages-list">
+                    <div 
+                        v-if="getMessages.length <= 0"
+                        class="chat-messages-info">
+                        <span>The guest has not sent a message yet!<br>Contact him below! :)</span>
+                    </div>
                     <div 
                         class="chat-messages-message"
                         v-bind:class="styleChatMessage(message)"
@@ -234,6 +239,11 @@ export default {
                     border-radius: 16px;
                     display: inline-block;
                 }
+            }
+
+            &-info {
+                text-align: center;
+                padding-top: 128px;
             }
         }
         
