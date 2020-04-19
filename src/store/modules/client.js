@@ -128,6 +128,7 @@ const mutations = {
         state.guests = guests;
     },
     addGuestToStore(state, guest) {
+        if(state.guests.find(g => g.id === guest.id)) return;
         state.guests = [...state.guests, guest];
     },
     setCurrentGuest(state, guestId) {
