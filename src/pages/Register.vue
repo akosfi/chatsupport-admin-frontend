@@ -59,7 +59,14 @@
               id="passwordAgainInput">
           </div>
 
-          <button type="submit" class="btn btn-primary">Register</button>
+          <div class="d-flex justify-content-between">
+            <router-link
+              to="/login"
+            >
+              <button class="btn btn-link">Login</button>
+            </router-link>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
         </form>
       </div>
     </div>

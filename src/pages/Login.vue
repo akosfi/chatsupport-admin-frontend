@@ -37,7 +37,14 @@
               id="passwordInput">
           </div>
 
-          <button type="submit" class="btn btn-primary">Login</button>
+          <div class="d-flex justify-content-between">
+            <router-link
+              to="/register"
+            >
+              <button class="btn btn-link">Register</button>
+            </router-link>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
         </form>
       </div>
     </div>
