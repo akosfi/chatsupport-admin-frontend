@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import {getServerUrl} from '../../util';
-import {CONNECTED, DISCONNECTED, INCOMING_MESSAGE, INCOMING_MESSAGE_SEEN, IDENTIFY_USER} from '../../socket/contsants';
+import {CONNECTED, DISCONNECTED, GUEST_JOINED, INCOMING_MESSAGE, INCOMING_MESSAGE_SEEN, IDENTIFY_USER} from '../../socket/contsants';
 
 let socket;
 
@@ -37,7 +37,8 @@ const actions = {
                 dispatch('connectionChangedAction', true);
             });
             socket.on(DISCONNECTED, () => dispatch('connectionChangedAction', false));
-            socket.on(INCOMING_MESSAGE, (data) => dispatch('client/addMessageAction', data.message, {root:true}))
+            socket.on(INCOMING_MESSAGE, (data) => dispatch('client/addMessageAction', data.message, {root:true}));
+            socket.on(GUEST_JOINED, (data) => dispatch('client/addGuestAction', data.guest, {root:true}));
 
             resolve();
         });

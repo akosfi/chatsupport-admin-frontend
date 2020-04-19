@@ -107,6 +107,12 @@ const actions = {
             resolve();
         });
     },
+    addGuestAction({commit, state, dispatch}, guest) {
+        return new Promise((resolve, reject) => {
+            commit('addGuestToStore', guest);
+            resolve();
+        });
+    },
     setMessageSeenAction({commit, state}, message) {
         return new Promise((resolve, reject) => {
             commit('setMessageSeen', message);
